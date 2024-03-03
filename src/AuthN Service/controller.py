@@ -1,9 +1,12 @@
+import json
+
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token, verify_jwt_in_request
 from flask_jwt_extended.exceptions import NoAuthorizationError
 from jwt.exceptions import ExpiredSignatureError
 from werkzeug.security import check_password_hash
 from app import app, db
+from kafka_producer import producer
 from user import User
 
 
@@ -26,6 +29,13 @@ def register():
 
     db.session.add(new_user)
     db.session.commit()
+
+    try:
+        user_data = {"name": new_user.name, "roles": new_user.roles}
+        producer.produce('cud.auth', key=str(new_user.id), value=json.dumps(user_data))
+        producer.flush()
+    except Exception as e:
+        print(f"Error while sending to kafka: {e}")
 
     return jsonify({'message': "User registered succesfully"}), 201
 
