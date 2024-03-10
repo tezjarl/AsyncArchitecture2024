@@ -1,5 +1,4 @@
 from flask import Flask
-from kafka_consumer import start_consumer_thread
 from models import db
 
 app = Flask(__name__)
@@ -12,6 +11,7 @@ with app.app_context():
 
 
 from controller import *
+from kafka_consumer import start_consumer_thread
 
 
 if __name__ == "__main__":

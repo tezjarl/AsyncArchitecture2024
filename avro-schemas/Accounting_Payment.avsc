@@ -1,0 +1,23 @@
+{
+	"type": "record",
+	"name": "payment",
+	"fields": [
+		{
+			"name": "user_public_id",
+			"type": "string"
+		},
+		{
+			"name": "user_email",
+			"type": "string"
+		},
+		{
+			"name": "amount_to_pay",
+			"type": {
+				"type": "bytes",
+				"logicalType": "decimal",
+				"scale": 2,
+				"precision": 10
+			}
+		}
+	]
+}}

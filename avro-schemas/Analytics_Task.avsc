@@ -1,0 +1,32 @@
+{
+	"type": "record",
+	"name": "analytics_task",
+	"fields": [
+		{
+			"name": "public_id",
+			"type": "string"
+		},
+		{
+			"name": "assignee_public_id",
+			"type": "string"
+		},
+		{
+			"name": "sum_to_pay",
+			"type": {
+				"type": "bytes",
+				"logicalType": "decimal",
+				"scale": 2,
+				"precision": 10
+			}
+		},
+		{
+			"name": "sum_to_withdraw",
+			"type": {
+				"type": "bytes",
+				"logicalType": "decimal",
+				"scale": 2,
+				"precision": 10
+			}
+		}
+	]
+}

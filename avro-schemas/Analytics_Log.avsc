@@ -1,0 +1,34 @@
+{
+	"type": "record",
+	"name": "analytics_log",
+	"fields": [
+		{
+			"name": "task_public_id",
+			"type": "string"
+		},
+		{
+			"name": "user_public_id",
+			"type": "string"
+		},
+		{
+			"name": "operation_type",
+			"type": "int"
+		},
+		{
+			"name": "operation_sum",
+			"type": {
+				"type": "bytes",
+				"logicalType": "decimal",
+				"scale": 2,
+				"precision": 10
+			}
+		},
+		{
+			"name": "operation_timestamp",
+			"type": {
+				"type": "string",
+				"logicalType": "timestamp-micros"
+			}
+		}
+	]
+}

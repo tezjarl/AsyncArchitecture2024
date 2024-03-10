@@ -1,0 +1,10 @@
+{
+	"type": "record",
+	"name": "taskcompleted",
+	"fields": [
+		{
+			"name": "task_id",
+			"type": "string"
+		}
+	]
+}
