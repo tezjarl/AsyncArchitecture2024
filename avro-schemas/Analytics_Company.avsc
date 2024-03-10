@@ -1,0 +1,22 @@
+{
+	"type": "record",
+	"name": "analytics_company",
+	"fields": [
+		{
+			"name": "date",
+			"type": {
+				"type": "long",
+				"logicalType": "timestamp-millis"
+			}
+		},
+		{
+			"name": "earnings",
+			"type": {
+				"type": "bytes",
+				"logicalType": "decimal",
+				"scale": 2,
+				"precision": 10
+			}
+		}
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"type": "record",
+	"name": "User",
+	"fields": [
+		{
+			"name": "name",
+			"type": "string"
+		},
+		{
+			"name": "public_id",
+			"type": "string"
+		}
+	]
+}

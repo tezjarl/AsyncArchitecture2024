@@ -1,7 +1,6 @@
 import json
-
 from flask import request, jsonify
-from flask_jwt_extended import create_access_token, verify_jwt_in_request
+from flask_jwt_extended import create_access_token, verify_jwt_in_request, decode_token
 from flask_jwt_extended.exceptions import NoAuthorizationError
 from jwt.exceptions import ExpiredSignatureError
 from werkzeug.security import check_password_hash
@@ -31,8 +30,8 @@ def register():
     db.session.commit()
 
     try:
-        user_data = {"name": new_user.name, "roles": new_user.roles}
-        producer.produce('cud.auth', key=str(new_user.id), value=json.dumps(user_data))
+        user_data = {"name": new_user.username, "public_id": new_user.public_id}
+        producer.produce(topic='auth.user.created', value=user_data)
         producer.flush()
     except Exception as e:
         print(f"Error while sending to kafka: {e}")
@@ -68,7 +67,8 @@ def login():
 
     user = User.query.filter_by(username=name).first()
     if user and check_password_hash(user.password_hash, password):
-        access_token = create_access_token(identity=name)
+        claims = {'roles': user.roles}
+        access_token = create_access_token(identity=name, additional_claims=claims)
         return jsonify(access_token=access_token), 200
     else:
         return jsonify({'message': 'Incorrect username or password'}), 401
@@ -80,6 +80,8 @@ def verify_token():
     try:
         with app.test_request_context(headers={"Authorization": f"Bearer {token}"}):
             verify_jwt_in_request()
-        return jsonify(valid=True), 200
+        decoded_token = decode_token(token)
+        roles = decoded_token['additional_claims'].get('roles', [])
+        return jsonify({'valid': True, 'roles': roles}), 200
     except (NoAuthorizationError, ExpiredSignatureError):
-        return jsonify(valid=False), 200
+        return jsonify({'valid': False}), 200
